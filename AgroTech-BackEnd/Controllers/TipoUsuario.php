@@ -66,3 +66,23 @@ class TipoUsuario extends Controllers
              jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
          }
      }
+     // Eliminar un tipo de usuario
+    public function eliminar($idTipoUsuario)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "DELETE") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use DELETE"], 405);
+                return;
+            }
+
+            $request = $this->model->eliminarTipoUsuario($idTipoUsuario);
+
+            if ($request > 0) {
+                jsonResponse(["status" => true, "msg" => "Tipo de usuario eliminado"], 200);
+            } else {
+                jsonResponse(["status" => false, "msg" => "No se encontró el tipo de usuario"], 404);
+            }
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }
