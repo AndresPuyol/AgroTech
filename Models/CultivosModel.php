@@ -25,6 +25,15 @@ class CultivosModel extends Mysql
         return $request;
     }
 
+    public function obtenerCultivos()
+    {
+        $query = "SELECT * FROM cultivos";
+        error_log("Consulta SQL Obtener Todos: " . $query);
+        $request = $this->select_all($query);
+        return $request;
+    }
+
+
     public function actualizarCultivo($idCultivo, $Nombre, $Cantidad, $Img, $Descripcion, $Id_Tipo_Cultivo) 
     {
         $sql = "UPDATE cultivos SET Nombre = ?, Cantidad = ?, Img = ?, Descripcion = ?, Id_Tipo_Cultivo = ? WHERE Id_Cultivo = ?";
