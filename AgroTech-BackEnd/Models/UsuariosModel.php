@@ -30,3 +30,33 @@ class UsuariosModel extends Mysql
         $arrData = array($Id_Usuario);
         return $this->delete($sql, $arrData);
     }
+    //Este método verifica si un tipo de usuario existe en la base de datos
+    public function verificarTipoUsuario($Id_Tipo_Usuario)
+    {
+        $sql = "SELECT Id_Tipo_Usuario FROM Tipos_Usuarios WHERE Id_Tipo_Usuario = ?";
+        $arrData = array($Id_Tipo_Usuario);
+        return $this->select($sql, $arrData);
+    }
+//buscar usuario por correo
+    public function obtenerPorCorreo($Correo)
+    {
+        $sql = "SELECT * FROM Usuarios WHERE Correo = ?";
+        $arrData = array($Correo);
+        return $this->select($sql, $arrData);
+    }
+//verifica las credenciales busca usuario por correo y luego verifica
+    public function verificarCredenciales($Correo, $Password)
+    {
+        $usuario = $this->obtenerPorCorreo($Correo);
+        if ($usuario && password_verify($Password, $usuario['Password_Hash'])) {
+            return $usuario;
+        }
+        return null;
+    }
+
+    public function obtenerTodosUsuarios()
+    {
+        $sql = "SELECT * FROM Usuarios";
+        return $this->select_all($sql);
+    }
+}
