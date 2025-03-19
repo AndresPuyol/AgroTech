@@ -114,5 +114,11 @@ function validateLength($data, $min, $max)
     $length = strlen($data);
     return ($length >= $min && $length <= $max);
 }
+// Validar seguridad de la contraseña
+function validatePassword(string $password)
+{
+    $re = '/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+    return preg_match($re, $password);
+}
 
 ?>
