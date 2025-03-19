@@ -104,4 +104,7 @@ class MaterialesModel extends Mysql
     }
     
 }
+<<<<<<< HEAD
 }
+=======
+>>>>>>> 0a8db13 (Modelador de Materiales CRUD completo)
