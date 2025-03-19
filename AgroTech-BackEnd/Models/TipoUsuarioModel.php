@@ -33,4 +33,9 @@ class TipoUsuarioModel extends Mysql
          $sql = "SELECT * FROM Tipo_Usuario WHERE Id_Tipo_Usuario = ?";
          return $this->select($sql, array($id_tipo_usuario));
      }
- }
+     public function obtenerTodosLosTiposUsuario()
+{
+    $sql = "SELECT * FROM Tipo_Usuario";
+    return $this->select_all($sql);
+}
+}

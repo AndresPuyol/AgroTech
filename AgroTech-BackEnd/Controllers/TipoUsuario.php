@@ -107,3 +107,25 @@ class TipoUsuario extends Controllers
              jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
          }
      }
+      // Obtener todos los tipos de usuario
+public function listarTodos()
+{
+    try {
+        if ($_SERVER['REQUEST_METHOD'] !== "GET") {
+            jsonResponse(["status" => false, "msg" => "Método no permitido, use GET"], 405);
+            return;
+        }
+
+        $tiposUsuario = $this->model->obtenerTodosLosTiposUsuario();
+
+        if (!empty($tiposUsuario)) {
+            jsonResponse(["status" => true, "data" => $tiposUsuario], 200);
+        } else {
+            jsonResponse(["status" => false, "msg" => "No hay tipos de usuario registrados"], 404);
+        }
+    } catch (Exception $e) {
+        jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+    }
+}
+
+}
