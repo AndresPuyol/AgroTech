@@ -126,3 +126,49 @@ class Usuarios extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+    public function iniciarSesion()
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "POST") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use POST"], 405);
+                return;
+            }
+
+            $_POST = json_decode(file_get_contents("php://input"), true);
+
+            if (!isset($_POST['Correo'], $_POST['Password'])) {
+                jsonResponse(["status" => false, "msg" => "Faltan datos"], 400);
+                return;
+            }
+
+            $Correo = $_POST['Correo'];
+            $Password = $_POST['Password'];
+
+            $usuario = $this->model->obtenerPorCorreo($Correo);
+
+            if ($usuario && password_verify($Password, $usuario['Password_Hash'])) {
+                jsonResponse(["status" => true, "msg" => "Inicio de sesión exitoso"], 200);
+            } else {
+                jsonResponse(["status" => false, "msg" => "Credenciales incorrectas"], 401);
+            }
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }
+
+    public function obtenerTodos()
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "GET") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use GET"], 405);
+                return;
+            }
+
+            $usuarios = $this->model->obtenerTodosUsuarios();
+
+            jsonResponse(["status" => true, "data" => $usuarios], 200);
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }
+}
