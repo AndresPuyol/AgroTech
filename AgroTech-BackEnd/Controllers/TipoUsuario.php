@@ -86,3 +86,24 @@ class TipoUsuario extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+
+     // Obtener datos de un tipo de usuario
+     public function obtener($idTipoUsuario)
+     {
+         try {
+             if ($_SERVER['REQUEST_METHOD'] !== "GET") {
+                 jsonResponse(["status" => false, "msg" => "Método no permitido, use GET"], 405);
+                 return;
+             }
+ 
+             $tipoUsuario = $this->model->obtenerTipoUsuario($idTipoUsuario);
+ 
+             if ($tipoUsuario) {
+                 jsonResponse(["status" => true, "data" => $tipoUsuario], 200);
+             } else {
+                 jsonResponse(["status" => false, "msg" => "Tipo de usuario no encontrado"], 404);
+             }
+         } catch (Exception $e) {
+             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+         }
+     }

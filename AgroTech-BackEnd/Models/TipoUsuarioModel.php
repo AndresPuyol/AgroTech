@@ -27,3 +27,10 @@ class TipoUsuarioModel extends Mysql
         $arrData = array($id_tipo_usuario);
         return $this->delete($sql, $arrData);
     }
+     // Obtener datos de un tipo de usuario
+     public function obtenerTipoUsuario($id_tipo_usuario)
+     {
+         $sql = "SELECT * FROM Tipo_Usuario WHERE Id_Tipo_Usuario = ?";
+         return $this->select($sql, array($id_tipo_usuario));
+     }
+ }
