@@ -60,5 +60,40 @@ class EpaModel extends Mysql
         return $request;
     }
 
+    public function updateEpa($Id_Epa, $Fecha_Encuentro, $Nombre, $Descripcion, $Tipo_Enfermedad, $Deficiencias, $Img, $Complicaciones)
+    {
+        $sql = "UPDATE epa SET Fecha_Encuentro = :Fecha_Encuentro, Nombre = :Nombre, Descripcion = :Descripcion, Tipo_Enfermedad = :Tipo_Enfermedad, Deficiencias = :Deficiencias, Img = :Img, Complicaciones = :Complicaciones WHERE Id_Epa = :Id_Epa";
+        $arrayEpa = array(
+            ':Fecha_Encuentro' => $Fecha_Encuentro,
+            ':Nombre' => $Nombre,
+            ':Descripcion' => $Descripcion,
+            ':Tipo_Enfermedad' => $Tipo_Enfermedad,
+            ':Deficiencias' => $Deficiencias,
+            ':Img' => $Img,
+            ':Complicaciones' => $Complicaciones,
+            ':Id_Epa' => $Id_Epa
+        );
+
+        $request = $this->update($sql, $arrayEpa);
+        return $request;
+    }
+
+    public function deleteEpa($Id_Epa)
+    {
+        $this->Id_Epa = $Id_Epa;
+        $sql = "DELETE FROM epa WHERE Id_Epa = :Id_Epa";
+        $arrayEpa = array(
+            ':Id_Epa' => $Id_Epa
+        );
+        $request = $this->delete($sql, $arrayEpa);
+        return $request;
+    }
+
+    public function getAllEpa()
+    {
+        $sql = 'SELECT * FROM epa';
+        $request = $this->select_all($sql);
+        return $request;
+    }
 }
 ?>
