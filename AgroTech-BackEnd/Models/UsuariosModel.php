@@ -24,3 +24,9 @@ class UsuariosModel extends Mysql
         $arrData = array($Nombre, $Apellidos, $Telefono, $Correo, $Id_Tipo_Usuario, $Id_Usuario);
         return $this->update($sql, $arrData);
     }
+    public function eliminarUsuario($Id_Usuario)
+    {
+        $sql = "DELETE FROM Usuarios WHERE Id_Usuario = ?";
+        $arrData = array($Id_Usuario);
+        return $this->delete($sql, $arrData);
+    }

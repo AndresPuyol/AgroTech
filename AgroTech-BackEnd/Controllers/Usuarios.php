@@ -107,3 +107,22 @@ class Usuarios extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+    public function eliminar($Id_Usuario)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "DELETE") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use DELETE"], 405);
+                return;
+            }
+
+            $request = $this->model->eliminarUsuario($Id_Usuario);
+
+            if ($request > 0) {
+                jsonResponse(["status" => true, "msg" => "Usuario eliminado"], 200);
+            } else {
+                jsonResponse(["status" => false, "msg" => "No se encontró el usuario"], 404);
+            }
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }
