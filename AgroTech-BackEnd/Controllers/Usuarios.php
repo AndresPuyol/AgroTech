@@ -67,3 +67,43 @@ class Usuarios extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+    public function actualizar($Id_Usuario)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use PUT"], 405);
+                return;
+            }
+
+            $_PUT = json_decode(file_get_contents("php://input"), true);
+
+            if (!isset($_PUT['Nombre'], $_PUT['Apellidos'], $_PUT['Telefono'], $_PUT['Correo'], $_PUT['Id_Tipo_Usuario'])) {
+                jsonResponse(["status" => false, "msg" => "Faltan datos obligatorios"], 400);
+                return;
+            }
+
+            $Nombre = $_PUT['Nombre'];
+            $Apellidos = $_PUT['Apellidos'];
+            $Telefono = $_PUT['Telefono'];
+            $Correo = $_PUT['Correo'];
+            $Id_Tipo_Usuario = $_PUT['Id_Tipo_Usuario'];
+
+            // Verificar que el tipo de usuario exista
+            $tipoUsuarioExiste = $this->model->verificarTipoUsuario($Id_Tipo_Usuario);
+
+            if (!$tipoUsuarioExiste) {
+                jsonResponse(["status" => false, "msg" => "El tipo de usuario no existe"], 400);
+                return;
+            }
+
+            $request = $this->model->actualizarUsuario($Id_Usuario, $Nombre, $Apellidos, $Telefono, $Correo, $Id_Tipo_Usuario);
+
+            if ($request !== false) {
+                jsonResponse(["status" => true, "msg" => "Datos actualizados correctamente"], 200);
+            } else {
+                jsonResponse(["status" => false, "msg" => "Error al actualizar o datos iguales"], 400);
+            }
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }

@@ -18,3 +18,9 @@ class UsuariosModel extends Mysql
         $arrData = array($Id_Usuario);
         return $this->select($sql, $arrData);
     }
+    public function actualizarUsuario($Id_Usuario, $Nombre, $Apellidos, $Telefono, $Correo, $Id_Tipo_Usuario)
+    {
+        $sql = "UPDATE Usuarios SET Nombre = ?, Apellidos = ?, Telefono = ?, Correo = ?, Id_Tipo_Usuario = ? WHERE Id_Usuario = ?";
+        $arrData = array($Nombre, $Apellidos, $Telefono, $Correo, $Id_Tipo_Usuario, $Id_Usuario);
+        return $this->update($sql, $arrData);
+    }
