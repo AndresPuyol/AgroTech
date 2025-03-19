@@ -120,5 +120,31 @@ function validatePassword(string $password)
     $re = '/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
     return preg_match($re, $password);
 }
+// Verificar credenciales de usuario
+function verifyUserCredentials(string $correo, string $password)
+{
+    $userModel = new UsuariosModel(); // CORRECTO
+    $usuario = $userModel->obtenerPorCorreo($correo);
 
+    if (!$usuario) {
+        return ["status" => false, "msg" => "Usuario no encontrado"];
+    }
+
+    if (!password_verify($password, $usuario['Password_Hash'])) {
+        return ["status" => false, "msg" => "Contraseña incorrecta"];
+    }
+
+    return [
+        "status" => true,
+        "msg" => "Credenciales válidas",
+        "usuario" => [
+            "PK_identificacion" => $usuario['PK_identificacion'],
+            "nombre" => $usuario['nombre'],
+            "apellidos" => $usuario['apellidos'],
+            "telefono" => $usuario['telefono'],
+            "correo" => $usuario['correo'],
+            "FK_id_tipo_usuario" => $usuario['FK_id_tipo_usuario']
+        ]
+    ];
+}
 ?>
