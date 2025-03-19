@@ -125,5 +125,148 @@ class Epa extends Controllers
         jsonResponse($response, $code);
     }
 
+    public function actualizarEpa($Id_Epa)
+    {
+        $response = [];
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == "PUT") {
+
+                $_PUT = json_decode(file_get_contents("php://input"), true);
+
+                if (!isset($_PUT['Nombre']) || !testString($_PUT['Nombre'])) {
+                    $response = array('status' => false, 'msg' => 'El nombre debe ser un texto');
+                    jsonResponse($response, 200);
+                    die();
+                }
+
+                if (!isset($_PUT['Descripcion']) || !testString($_PUT['Descripcion'])) {
+                    $response = array('status' => false, 'msg' => 'La descripcion debe ser un texto');
+                    jsonResponse($response, 200);
+                    die();
+                }
+
+                $Fecha_Encuentro = $_PUT['Fecha_Encuentro'];
+                $Nombre = ucwords(strtolower($_PUT['Nombre']));
+                $Descripcion = ucwords(strtolower($_PUT['Descripcion']));
+                $Tipo_Enfermedad = isset($_PUT['Tipo_Enfermedad']) ? $_PUT['Tipo_Enfermedad'] : null;
+                $Deficiencias = isset($_PUT['Deficiencias']) ? $_PUT['Deficiencias'] : null;
+                $Img = isset($_PUT['Img']) ? $_PUT['Img'] : null;
+                $Complicaciones = isset($_PUT['Complicaciones']) ? $_PUT['Complicaciones'] : null;
+
+                $request = $this->model->updateEpa(
+                    $Id_Epa,
+                    $Fecha_Encuentro,
+                    $Nombre,
+                    $Descripcion,
+                    $Tipo_Enfermedad,
+                    $Deficiencias,
+                    $Img,
+                    $Complicaciones
+                );
+
+                if ($request > 0) {
+                    $response = array(
+                        "status" => true,
+                        "msg" => "Datos del epa actualizados correctamente"
+                    );
+                } else {
+                    $response = array(
+                        "status" => false,
+                        "msg" => "Error al actualizar epa"
+                    );
+                }
+                $code = 200;
+            } else {
+                $response = array(
+                    "status" => false,
+                    "msg" => "Error en la solicitud: " . $method . " cambie a PUT"
+                );
+                $code = 400;
+            }
+        } catch (Exception $e) {
+            echo "error en el proceso" . $e->getMessage();
+        }
+        jsonResponse($response, $code);
+    }
+
+    public function eliminarEpa($Id_Epa)
+    {
+        $response = [];
+
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == "DELETE") {
+
+                $epa = $this->model->getEpa($Id_Epa);
+
+                if ($epa) {
+                    $request = $this->model->deleteEpa($Id_Epa);
+
+                    if ($request > 0) {
+                        $response = array(
+                            "status" => true,
+                            "msg" => "Epa eliminado correctamente",
+                            "data" => $epa
+                        );
+                    } else {
+                        $response = array(
+                            "status" => false,
+                            "msg" => "Error al eliminar epa"
+                        );
+                    }
+                } else {
+                    $response = array(
+                        "status" => false,
+                        "msg" => "Epa no encontrado"
+                    );
+                }
+                $code = 200;
+            } else {
+                $response = array(
+                    "status" => false,
+                    "msg" => "Error en la solicitud: " . $method . " cambie a DELETE"
+                );
+                $code = 400;
+            }
+        } catch (Exception $e) {
+            echo "error en el proceso" . $e->getMessage();
+        }
+        jsonResponse($response, $code);
+    }
+
+    public function informacionEpa()
+    {
+        $response = [];
+
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == "GET") {
+
+                $epas = $this->model->getAllEpa();
+
+                if ($epas) {
+                    $response = array(
+                        "status" => true,
+                        "data" => $epas
+                    );
+                } else {
+                    $response = array(
+                        "status" => false,
+                        "msg" => "No se encontraron registros de epas"
+                    );
+                }
+                $code = 200;
+            } else {
+                $response = array(
+                    "status" => false,
+                    "msg" => "Error en la solicitud: " . $method . " cambie a GET"
+                );
+                $code = 400;
+            }
+        } catch (Exception $e) {
+            echo "error en el proceso" . $e->getMessage();
+        }
+        jsonResponse($response, $code);
+    }
 }
-?>
