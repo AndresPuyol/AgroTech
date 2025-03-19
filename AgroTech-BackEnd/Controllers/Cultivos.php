@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 class Cultivos extends Controllers
 {
     public function __construct()
@@ -8,15 +6,79 @@ class Cultivos extends Controllers
         parent::__construct();
     }
 
-    public function cultivo($idCultivo)
+    // Obtener todos los cultivos registrados
+    public function obtenerCultivos()
     {
-        echo "Hola desde cultivo con el id=" . $idCultivo;
+        $response = [];
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == "GET") {
+                $cultivos = $this->model->obtenerCultivos();
+                if ($cultivos) {
+                    $response = array(
+                        "status" => true,
+                        "data" => $cultivos
+                    );
+                } else {
+                    $response = array(
+                        "status" => false,
+                        "msg" => "No se encontraron cultivos"
+                    );
+                }
+            } else {
+                $response = array(
+                    "status" => false,
+                    "msg" => "Método no permitido. Usa GET"
+                );
+            }
+        } catch (\Exception $e) {
+            $response = array(
+                "status" => false,
+                "msg" => "Error en el proceso: " . $e->getMessage()
+            );
+        }
+        jsonResponse($response, 200);
     }
 
+    // Obtener un cultivo específico por su ID
+    public function obtener($idCultivo)
+    {
+        $response = [];
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            if ($method == "GET") {
+                $cultivo = $this->model->obtenerCultivo($idCultivo);
+
+                if ($cultivo) {
+                    $response = array(
+                        "status" => true,
+                        "data" => $cultivo
+                    );
+                } else {
+                    $response = array(
+                        "status" => false,
+                        "msg" => "Cultivo no encontrado"
+                    );
+                }
+            } else {
+                $response = array(
+                    "status" => false,
+                    "msg" => "Método no permitido. Usa GET"
+                );
+            }
+        } catch (\Exception $e) {
+            $response = array(
+                "status" => false,
+                "msg" => "Error en el proceso: " . $e->getMessage()
+            );
+        }
+        jsonResponse($response, 200);
+    }
+
+    // Registrar un nuevo cultivo
     public function registrar()
     {
         $response = [];
-
         try {
             $method = $_SERVER['REQUEST_METHOD'];
             if ($method == "POST") {
@@ -43,7 +105,7 @@ class Cultivos extends Controllers
 
                 if ($request > 0) {
                     $arraCultivo = array(
-                        'Id_Cultivo' => $request, // El ID generado por autoincremental
+                        'Id_Cultivo' => $request,
                         'Nombre' => $Nombre,
                         'Cantidad' => $Cantidad,
                         'Img' => $Img,
@@ -62,34 +124,26 @@ class Cultivos extends Controllers
                         "msg" => "Error al registrar el cultivo"
                     );
                 }
-                $code = 200;
-
             } else {
                 $response = array(
                     "status" => false,
-                    "msg" => "Los datos no se registraron, error en la solicitud: " . $method . " cambie a POST"
+                    "msg" => "Método no permitido. Usa POST"
                 );
-                $code = 400;
             }
-
         } catch (\Exception $e) {
             echo "Error en el proceso: " . $e->getMessage();
         }
-
-        jsonResponse($response, $code);
+        jsonResponse($response, 200);
     }
 
+    // Actualizar un cultivo
     public function actualizar($idCultivo)
     {
         $response = [];
-
         try {
             $method = $_SERVER['REQUEST_METHOD'];
             if ($method == "PUT") {
                 $_PUT = json_decode(file_get_contents("php://input"), true);
-
-                error_log("Datos recibidos en actualizar: " . print_r($_PUT, true));
-
 
                 $Nombre = ucwords(strtolower($_PUT['Nombre']));
                 $Cantidad = $_PUT['Cantidad'];
@@ -97,41 +151,35 @@ class Cultivos extends Controllers
                 $Descripcion = $_PUT['Descripcion'];
                 $Id_Tipo_Cultivo = $_PUT['Id_Tipo_Cultivo'];
 
-
                 $request = $this->model->actualizarCultivo($idCultivo, $Nombre, $Cantidad, $Img, $Descripcion, $Id_Tipo_Cultivo);
 
                 if ($request > 0) {
                     $response = array(
                         "status" => true,
-                        "msg" => "Datos actualizados correctamente"
+                        "msg" => "Cultivo actualizado correctamente"
                     );
                 } else {
                     $response = array(
                         "status" => false,
-                        "msg" => "Error al actualizar los datos"
+                        "msg" => "Error al actualizar el cultivo"
                     );
                 }
-                $code = 200;
-
             } else {
                 $response = array(
                     "status" => false,
-                    "msg" => "Error en la solicitud: " . $method . " cambie a PUT"
+                    "msg" => "Método no permitido. Usa PUT"
                 );
-                $code = 400;
             }
-
         } catch (\Exception $e) {
             echo "Error en el proceso: " . $e->getMessage();
         }
-
-        jsonResponse($response, $code);
+        jsonResponse($response, 200);
     }
 
+    // Eliminar un cultivo
     public function eliminar($idCultivo)
     {
         $response = [];
-
         try {
             $method = $_SERVER['REQUEST_METHOD'];
             if ($method == "DELETE") {
@@ -148,58 +196,15 @@ class Cultivos extends Controllers
                         "msg" => "Error al eliminar el cultivo"
                     );
                 }
-                $code = 200;
-
             } else {
                 $response = array(
                     "status" => false,
-                    "msg" => "Error en la solicitud: " . $method . " cambie a DELETE"
+                    "msg" => "Método no permitido. Usa DELETE"
                 );
-                $code = 400;
             }
-
         } catch (\Exception $e) {
             echo "Error en el proceso: " . $e->getMessage();
         }
-
-        jsonResponse($response, $code);
-    }
-
-    public function obtener($idCultivo)
-    {
-        $response = [];
-
-        try {
-            $method = $_SERVER['REQUEST_METHOD'];
-            if ($method == "GET") {
-                $cultivo = $this->model->obtenerCultivo($idCultivo);
-
-                if ($cultivo) {
-                    $response = array(
-                        "status" => true,
-                        "data" => $cultivo
-                    );
-                } else {
-                    $response = array(
-                        "status" => false,
-                        "msg" => "Cultivo no encontrado"
-                    );
-                }
-                $code = 200;
-
-            } else {
-                $response = array(
-                    "status" => false,
-                    "msg" => "Error en la solicitud: " . $method . " cambie a GET"
-                );
-                $code = 400;
-            }
-
-        } catch (\Exception $e) {
-            echo "Error en el proceso: " . $e->getMessage();
-        }
-
-        jsonResponse($response, $code);
+        jsonResponse($response, 200);
     }
 }
-?>

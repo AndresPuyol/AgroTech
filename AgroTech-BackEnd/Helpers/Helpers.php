@@ -115,4 +115,13 @@ function validateLength($data, $min, $max)
     return ($length >= $min && $length <= $max);
 }
 
+// Validar el formato de una fecha (YYYY-MM-DD HH:mm:ss)
+function testFecha($fecha)
+{
+    $formato = 'Y-m-d H:i:s';
+    $d = DateTime::createFromFormat($formato, $fecha);
+    return $d && $d->format($formato) === $fecha;
+}
+
+
 ?>
