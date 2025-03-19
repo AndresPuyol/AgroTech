@@ -12,3 +12,9 @@ class UsuariosModel extends Mysql
         $arrData = array($Id_Identificacion, $Nombre, $Apellidos, $Telefono, $Correo, $Password_Hash, $Id_Tipo_Usuario);
         return $this->insert($sql, $arrData);
     }
+    public function obtenerUsuario($Id_Usuario)
+    {
+        $sql = "SELECT * FROM Usuarios WHERE Id_Usuario = ?";
+        $arrData = array($Id_Usuario);
+        return $this->select($sql, $arrData);
+    }

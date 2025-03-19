@@ -48,3 +48,22 @@ class Usuarios extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+    public function obtener($Id_Usuario)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== "GET") {
+                jsonResponse(["status" => false, "msg" => "Método no permitido, use GET"], 405);
+                return;
+            }
+
+            $usuario = $this->model->obtenerUsuario($Id_Usuario);
+
+            if ($usuario) {
+                jsonResponse(["status" => true, "data" => $usuario], 200);
+            } else {
+                jsonResponse(["status" => false, "msg" => "Usuario no encontrado"], 404);
+            }
+        } catch (Exception $e) {
+            jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+        }
+    }
