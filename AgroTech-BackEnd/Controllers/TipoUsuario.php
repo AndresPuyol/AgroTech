@@ -36,3 +36,33 @@ class TipoUsuario extends Controllers
             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
         }
     }
+     // Actualizar un tipo de usuario
+     public function actualizar($idTipoUsuario)
+     {
+         try {
+             if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
+                 jsonResponse(["status" => false, "msg" => "Método no permitido, use PUT"], 405);
+                 return;
+             }
+ 
+             $_PUT = json_decode(file_get_contents("php://input"), true);
+ 
+             if (empty($_PUT['nombre']) || !is_string($_PUT['nombre'])) {
+                 jsonResponse(["status" => false, "msg" => "El nombre es obligatorio y debe ser texto"], 400);
+                 return;
+             }
+ 
+             $nombre = $_PUT['nombre'];
+             $descripcion = $_PUT['descripcion'] ?? '';
+ 
+             $request = $this->model->actualizarTipoUsuario($idTipoUsuario, $nombre, $descripcion);
+ 
+             if ($request > 0) {
+                 jsonResponse(["status" => true, "msg" => "Datos actualizados correctamente"], 200);
+             } else {
+                 jsonResponse(["status" => false, "msg" => "Error al actualizar o no hubo cambios"], 400);
+             }
+         } catch (Exception $e) {
+             jsonResponse(["status" => false, "msg" => "Error: " . $e->getMessage()], 500);
+         }
+     }
