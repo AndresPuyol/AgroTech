@@ -44,4 +44,52 @@ class MaterialesModel extends Mysql
             return $request_insert;
         }
     }
+
+    public function getMaterial(int $Id_Material)
+    {
+        $this->Id_Material = $Id_Material;
+        $sql = "SELECT Nombre,Precio,Descripcion,Tipo_Material,Tipo_Medida_Material,Cantidad FROM Materiales WHERE Id_Material = :Id_Material";
+        $arrayMaterial = array(
+            ':Id_Material' => $Id_Material
+        );
+
+        $request = $this->select($sql, $arrayMaterial);
+        return $request;
+    }
+
+    public function updateMaterial($Id_Material, $Nombre, $Precio, $Descripcion, $Tipo_Material, $Tipo_Medida_Material, $Cantidad)
+    {
+        $sql = "UPDATE Materiales SET Nombre = :Nombre, Precio = :Precio, Descripcion = :Descripcion, Tipo_Material = :TipoM, Tipo_Medida_Material = :TipoMM, Cantidad = :Cantidad WHERE Id_Material = :Id_Material";
+        $arrayMaterial = array(
+            ':Nombre' => $Nombre,
+            ':Precio' => $Precio,
+            ':Descripcion' => $Descripcion,
+            ':TipoM' => $Tipo_Material,
+            ':TipoMM' => $Tipo_Medida_Material,
+            ':Cantidad' => $Cantidad,
+            ':Id_Material' => $Id_Material
+        );
+
+        $request = $this->update($sql, $arrayMaterial);
+        return $request;
+    }
+
+    public function deleteMaterial($Id_Material)
+    {
+      $this->Id_Material = $Id_Material;
+      $sql = "DELETE FROM Materiales WHERE Id_Material = :Id_Material";
+      $arrayMaterial = array(
+          ':Id_Material' => $Id_Material
+      );
+      $request = $this->delete($sql, $arrayMaterial);
+      return $request;
+    }
+
+    public function GetAllMaterial()
+    {
+        $sql = 'SELECT * FROM Materiales';
+        $request = $this->select_all($sql);
+        return $request;
+    }
+    
 }
