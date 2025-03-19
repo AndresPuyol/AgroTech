@@ -66,7 +66,7 @@ function jsonResponse(array $arrData, int $code)
 // Validar string
 function testString(string $data)
 {
-    $re = '/[a-zA-ZÑñÁáÉéÍíÓóÚúÜü\s]+$/m';
+    $re = '/^[a-zA-ZÑñÁáÉéÍíÓóÚúÜü\s.,;:!?()\'"-]+$/m';
     if (preg_match($re, $data)) {
         return true;
     } else {
@@ -113,6 +113,12 @@ function validateLength($data, $min, $max)
 {
     $length = strlen($data);
     return ($length >= $min && $length <= $max);
+}
+
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
 }
 
 ?>
