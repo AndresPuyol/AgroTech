@@ -120,7 +120,7 @@ function validatePassword(string $password)
     $re = '/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
     return preg_match($re, $password);
 }
-// Verificar credenciales de usuario
+// Verificar las credenciales de usuario
 function verifyUserCredentials(string $correo, string $password)
 {
     $userModel = new UsuariosModel(); // CORRECTO
