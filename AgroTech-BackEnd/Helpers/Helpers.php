@@ -140,6 +140,7 @@ function testFecha($fecha)
     return $d && $d->format($formato) === $fecha;
 }
 
+
 function validateDate($date, $format = 'Y-m-d')
 
 // Verificar las credenciales de usuario
@@ -172,3 +173,4 @@ function verifyUserCredentials(string $correo, string $password)
 
 }
 ?>
+
