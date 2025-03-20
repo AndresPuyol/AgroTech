@@ -191,7 +191,7 @@
                     } else {
                         $response = array(
                             "status" => false,
-                            "msg" => "Error al actualizar material"
+                            "msg" => "Error al actualizar material, Los datos a actualizar ya estan actualizados"
                         );
                     }
                     $code = 200;
