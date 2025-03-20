@@ -59,6 +59,17 @@ class MaterialesModel extends Mysql
 
     public function updateMaterial($Id_Material, $Nombre, $Precio, $Descripcion, $Tipo_Material, $Tipo_Medida_Material, $Cantidad)
     {
+        // Verificar si los datos actuales son los mismos que los nuevos datos
+        $sql_check = "SELECT Nombre, Precio, Descripcion, Tipo_Material, Tipo_Medida_Material, Cantidad FROM Materiales WHERE Id_Material = :Id_Material";
+        $arrayCheck = array(':Id_Material' => $Id_Material);
+        $currentData = $this->select($sql_check, $arrayCheck);
+
+        if ($currentData['Nombre'] == $Nombre && $currentData['Precio'] == $Precio && $currentData['Descripcion'] == $Descripcion && $currentData['Tipo_Material'] == $Tipo_Material && $currentData['Tipo_Medida_Material'] == $Tipo_Medida_Material && $currentData['Cantidad'] == $Cantidad) {
+            // Si los datos son los mismos, no realizar la actualización
+            return false;
+        }
+
+        // Si los datos son diferentes, proceder con la actualización
         $sql = "UPDATE Materiales SET Nombre = :Nombre, Precio = :Precio, Descripcion = :Descripcion, Tipo_Material = :TipoM, Tipo_Medida_Material = :TipoMM, Cantidad = :Cantidad WHERE Id_Material = :Id_Material";
         $arrayMaterial = array(
             ':Nombre' => $Nombre,
