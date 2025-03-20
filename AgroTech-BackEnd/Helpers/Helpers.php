@@ -66,7 +66,11 @@ function jsonResponse(array $arrData, int $code)
 // Validar string
 function testString(string $data)
 {
+<<<<<<< HEAD
     $re = '/[a-zA-ZÑñÁáÉéÍíÓóÚúÜü\s]+$/m';
+=======
+    $re = '/^[a-zA-ZÑñÁáÉéÍíÓóÚúÜü\s.,;:!?()\'"-]+$/m';
+>>>>>>> dev
     if (preg_match($re, $data)) {
         return true;
     } else {
@@ -115,6 +119,7 @@ function validateLength($data, $min, $max)
     return ($length >= $min && $length <= $max);
 }
 
+<<<<<<< HEAD
 // Validar el formato de una fecha (YYYY-MM-DD HH:mm:ss)
 function testFecha($fecha)
 {
@@ -124,4 +129,12 @@ function testFecha($fecha)
 }
 
 
+=======
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+}
+
+>>>>>>> dev
 ?>
