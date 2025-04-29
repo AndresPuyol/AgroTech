@@ -13,29 +13,42 @@ class TipoUsuarioModel extends Mysql
         $arrData = array($nombre, $descripcion);
         return $this->insert($sql, $arrData);
     }
-     // Actualizar un tipo de usuario existente
-     public function actualizarTipoUsuario($id_tipo_usuario, $nombre, $descripcion)
-     {
-         $sql = "UPDATE Tipo_Usuario SET Nombre = ?, Descripcion = ? WHERE Id_Tipo_Usuario = ?";
-         $arrData = array($nombre, $descripcion, $id_tipo_usuario);
-         return $this->update($sql, $arrData);
-     }
-     // Eliminar un tipo de usuario
-    public function eliminarTipoUsuario($id_tipo_usuario)
+
+    // Actualizar un tipo de usuario existente
+    public function actualizarTipoUsuario($idTipoUsuario, $nombre, $descripcion)
+    {
+        $sql = "UPDATE Tipo_Usuario SET Nombre = ?, Descripcion = ? WHERE Id_Tipo_Usuario = ?";
+        $arrData = array($nombre, $descripcion, $idTipoUsuario);
+        return $this->update($sql, $arrData);
+    }
+
+    // Eliminar un tipo de usuario
+    public function eliminarTipoUsuario($idTipoUsuario)
     {
         $sql = "DELETE FROM Tipo_Usuario WHERE Id_Tipo_Usuario = ?";
-        $arrData = array($id_tipo_usuario);
+        $arrData = array($idTipoUsuario);
         return $this->delete($sql, $arrData);
     }
-     // Obtener datos de un tipo de usuario
-     public function obtenerTipoUsuario($id_tipo_usuario)
-     {
-         $sql = "SELECT * FROM Tipo_Usuario WHERE Id_Tipo_Usuario = ?";
-         return $this->select($sql, array($id_tipo_usuario));
-     }
-     public function obtenerTodosLosTiposUsuario()
-{
-    $sql = "SELECT * FROM Tipo_Usuario";
-    return $this->select_all($sql);
+
+    // Obtener un tipo de usuario por ID
+    public function obtenerTipoUsuario($idTipoUsuario)
+    {
+        $sql = "SELECT * FROM Tipo_Usuario WHERE Id_Tipo_Usuario = ?";
+        return $this->select($sql, array($idTipoUsuario));
+    }
+
+    // Obtener todos los tipos de usuario
+    public function obtenerTodosLosTiposUsuario()
+    {
+        $sql = "SELECT * FROM Tipo_Usuario";
+        return $this->select_all($sql);
+    }
+
+    // Obtener un tipo de usuario por nombre
+    public function obtenerTipoUsuarioPorNombre($nombre)
+    {
+        $sql = "SELECT * FROM Tipo_Usuario WHERE Nombre = ?";
+        return $this->select($sql, array($nombre));
+    }
 }
-}
+?>
